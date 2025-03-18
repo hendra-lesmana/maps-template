@@ -38,7 +38,13 @@ export default function Map() {
         zoom: 4
       });
 
-      map.current.addControl(new maplibregl.NavigationControl(), 'bottom-right');
+      map.current.addControl(new maplibregl.NavigationControl(), 'top-right');
+
+      // Add custom CSS to adjust navigation control position
+      const navControl = document.querySelector('.maplibregl-ctrl-top-right');
+      if (navControl instanceof HTMLElement) {
+        navControl.style.top = '4rem';
+      }
     }
 
     return () => {
