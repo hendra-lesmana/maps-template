@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useState } from "react";
 
 interface SidebarProps {
@@ -17,6 +18,7 @@ export default function Sidebar({ onBasemapChange }: SidebarProps) {
   const [openPrint, setOpenPrint] = useState(false);
   const [openLocation, setOpenLocation] = useState(false);
   const [openSettings, setOpenSettings] = useState(false);
+  const [selectedBasemap, setSelectedBasemap] = useState('osm');
 
   return (
     <>
@@ -47,30 +49,27 @@ export default function Sidebar({ onBasemapChange }: SidebarProps) {
         </Button>
       </nav>
       <Sheet open={openLayers} onOpenChange={setOpenLayers}>
-        <SheetContent side="left" className="w-[300px] p-0 ml-16 mt-14 h-[calc(100%-56px)] z-[100]">
+        <SheetContent side="left" className="w-[300px] p-0 ml-16 mt-14 h-[calc(100%-56px)]">
           <SheetTitle className="p-4 text-lg font-semibold">Layers</SheetTitle>
-          <div className="p-4 space-y-2">
-            <Button
-              variant="outline"
-              className="w-full justify-start"
-              onClick={() => onBasemapChange('osm')}
-            >
-              OpenStreetMap
-            </Button>
-            <Button
-              variant="outline"
-              className="w-full justify-start"
-              onClick={() => onBasemapChange('satellite')}
-            >
-              Satellite Imagery
-            </Button>
-            <Button
-              variant="outline"
-              className="w-full justify-start"
-              onClick={() => onBasemapChange('terrain')}
-            >
-              Terrain
-            </Button>
+          <div className="p-4">
+            <fieldset className="border border-gray-200 dark:border-gray-700 rounded-lg p-6 bg-gray-50 dark:bg-gray-800/50 shadow-sm">
+              <legend className="mb-2 text-sm font-medium px-3 bg-white dark:bg-gray-900 rounded-md">
+                Base Layers
+              </legend>
+              <Select value={selectedBasemap} onValueChange={(value) => {
+                setSelectedBasemap(value);
+                onBasemapChange(value);
+              }}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select a basemap" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="osm">OpenStreetMap</SelectItem>
+                  <SelectItem value="satellite">Satellite Imagery</SelectItem>
+                  <SelectItem value="terrain">Terrain</SelectItem>
+                </SelectContent>
+              </Select>
+            </fieldset>
           </div>
         </SheetContent>
       </Sheet>
