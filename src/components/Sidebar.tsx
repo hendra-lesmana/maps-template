@@ -19,6 +19,10 @@ export default function Sidebar({ onBasemapChange }: SidebarProps) {
   const [openLocation, setOpenLocation] = useState(false);
   const [openSettings, setOpenSettings] = useState(false);
   const [selectedBasemap, setSelectedBasemap] = useState('osm');
+  const [selectedProvince, setSelectedProvince] = useState('');
+  const [selectedRegency, setSelectedRegency] = useState('');
+  const [selectedResidence, setSelectedResidence] = useState('');
+  const [selectedVillage, setSelectedVillage] = useState('');
 
   return (
     <>
@@ -51,16 +55,63 @@ export default function Sidebar({ onBasemapChange }: SidebarProps) {
       <Sheet open={openLayers} onOpenChange={setOpenLayers}>
         <SheetContent side="left" className="w-[300px] p-0 ml-16 mt-14 h-[calc(100%-56px)]">
           <SheetTitle className="p-4 text-lg font-semibold">Layers</SheetTitle>
-          <div className="p-4">
-            <fieldset className="border border-gray-200 dark:border-gray-700 rounded-lg p-6 bg-gray-50 dark:bg-gray-800/50 shadow-sm">
-              <legend className="mb-2 text-sm font-medium px-3 bg-white dark:bg-gray-900 rounded-md">
+          <div className="p-1">
+            <fieldset className="mt-1 border border-gray-200/20 dark:border-gray-700/50 rounded-xl p-3 bg-gradient-to-br from-gray-50/5 via-gray-100/10 to-gray-50/5 dark:from-gray-800/20 dark:via-gray-700/20 dark:to-gray-800/20 shadow-lg backdrop-blur-sm transition-all duration-200 hover:shadow-xl hover:border-gray-300/30 dark:hover:border-gray-600/50">
+              <legend className="text-xs font-medium px-2 py-0.5 bg-gradient-to-r from-white/90 via-white/95 to-white/90 dark:from-gray-900/90 dark:via-gray-900/95 dark:to-gray-900/90 rounded-lg text-gray-700 dark:text-gray-300 shadow-sm">
+                Administrative Layers
+              </legend>
+              <div className="space-y-1.5">
+                <Select value={selectedProvince} onValueChange={setSelectedProvince}>
+                  <SelectTrigger className="w-full h-7 text-xs">
+                    <SelectValue placeholder="Select a province" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="province1">Province 1</SelectItem>
+                    <SelectItem value="province2">Province 2</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                <Select value={selectedRegency} onValueChange={setSelectedRegency}>
+                  <SelectTrigger className="w-full h-7 text-xs">
+                    <SelectValue placeholder="Select a regency" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="regency1">Regency 1</SelectItem>
+                    <SelectItem value="regency2">Regency 2</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                <Select value={selectedResidence} onValueChange={setSelectedResidence}>
+                  <SelectTrigger className="w-full h-7 text-xs">
+                    <SelectValue placeholder="Select a residence" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="residence1">Residence 1</SelectItem>
+                    <SelectItem value="residence2">Residence 2</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                <Select value={selectedVillage} onValueChange={setSelectedVillage}>
+                  <SelectTrigger className="w-full h-7 text-xs">
+                    <SelectValue placeholder="Select a village" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="village1">Village 1</SelectItem>
+                    <SelectItem value="village2">Village 2</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </fieldset>
+
+            <fieldset className="mt-1 border border-gray-200/20 dark:border-gray-700/50 rounded-xl p-3 bg-gradient-to-br from-gray-50/5 via-gray-100/10 to-gray-50/5 dark:from-gray-800/20 dark:via-gray-700/20 dark:to-gray-800/20 shadow-lg backdrop-blur-sm transition-all duration-200 hover:shadow-xl hover:border-gray-300/30 dark:hover:border-gray-600/50">
+              <legend className="text-xs font-medium px-2 py-0.5 bg-gradient-to-r from-white/90 via-white/95 to-white/90 dark:from-gray-900/90 dark:via-gray-900/95 dark:to-gray-900/90 rounded-lg text-gray-700 dark:text-gray-300 shadow-sm">
                 Base Layers
               </legend>
               <Select value={selectedBasemap} onValueChange={(value) => {
                 setSelectedBasemap(value);
                 onBasemapChange(value);
               }}>
-                <SelectTrigger className="w-full">
+                <SelectTrigger className="w-full h-7 text-xs">
                   <SelectValue placeholder="Select a basemap" />
                 </SelectTrigger>
                 <SelectContent>
