@@ -4,17 +4,74 @@ import { useRef, useEffect } from 'react';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
-export default function Map() {
+interface MapProps {
+  selectedBasemap: string;
+}
+
+export default function Map({ selectedBasemap }: MapProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<maplibregl.Map | null>(null);
 
+  const getMapStyle = (basemap: string): maplibregl.StyleSpecification | null => {
+    if (basemap === 'osm') {
+      return {
+        version: 8 as const,
+        sources: {
+          'osm-tiles': {
+            type: 'raster',
+            tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],
+            tileSize: 256,
+            attribution: '© OpenStreetMap contributors'
+          }
+        },
+        layers: [
+          {
+            id: 'osm-tiles',
+            type: 'raster',
+            source: 'osm-tiles',
+            minzoom: 0,
+            maxzoom: 19
+          }
+        ]
+      };
+    } else if (basemap === 'satellite') {
+      return {
+        version: 8 as const,
+        sources: {
+          'satellite-tiles': {
+            type: 'raster',
+            tiles: ['https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'],
+            tileSize: 256,
+            attribution: '© Esri'
+          }
+        },
+        layers: [
+          {
+            id: 'satellite-tiles',
+            type: 'raster',
+            source: 'satellite-tiles',
+            minzoom: 0,
+            maxzoom: 19
+          }
+        ]
+      };
+    }
+    return null;
+  };
+
   useEffect(() => {
-    if (map.current) return;
+    const style = getMapStyle(selectedBasemap);
+    if (!style) return;
+
+    if (map.current) {
+      map.current.setStyle(style);
+      return;
+    }
 
     if (mapContainer.current) {
       map.current = new maplibregl.Map({
         container: mapContainer.current,
-        style: {
+        style: style || {
           version: 8,
           sources: {
             'osm-tiles': {
@@ -53,7 +110,7 @@ export default function Map() {
         map.current = null;
       }
     };
-  }, []);
+  }, [selectedBasemap]);
 
   return (
     <div className="w-full h-full">

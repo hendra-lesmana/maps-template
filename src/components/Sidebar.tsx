@@ -5,8 +5,9 @@ import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/s
 import { Separator } from "@/components/ui/separator";
 import { useState } from "react";
 
-export default function Sidebar() {
+export default function Sidebar({ onBasemapChange }: { onBasemapChange: (basemap: string) => void }) {
   const [open, setOpen] = useState(false);
+  const [selectedBasemap, setSelectedBasemap] = useState('osm');
 
   return (
     <>
@@ -16,9 +17,6 @@ export default function Sidebar() {
         </Button>
         <Button variant="ghost" size="icon" className="text-white hover:bg-gray-800" onClick={() => setOpen(true)}>
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83l-8.58-3.91z"/><path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65"/><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"/></svg>
-        </Button>
-        <Button variant="ghost" size="icon" className="text-white hover:bg-gray-800">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
         </Button>
         <Button variant="ghost" size="icon" className="text-white hover:bg-gray-800">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
@@ -50,6 +48,39 @@ export default function Sidebar() {
               <h2 className="text-lg font-semibold">Layers</h2>
               <Separator className="my-4" />
               <div className="space-y-4">
+                <h3 className="text-sm font-medium">Base Layer</h3>
+                <div className="space-y-2">
+                  <label className="flex items-center space-x-2 cursor-pointer">
+                    <input
+                    type="radio"
+                    name="basemap"
+                    value="osm"
+                    checked={selectedBasemap === 'osm'}
+                    onChange={(e) => {
+                      setSelectedBasemap(e.target.value);
+                      onBasemapChange(e.target.value);
+                    }}
+                    className="h-4 w-4"
+                  />
+                    <span>OpenStreetMap</span>
+                  </label>
+                  <label className="flex items-center space-x-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="basemap"
+                      value="satellite"
+                      checked={selectedBasemap === 'satellite'}
+                      onChange={(e) => {
+                        setSelectedBasemap(e.target.value);
+                        onBasemapChange(e.target.value);
+                      }}
+                      className="h-4 w-4"
+                    />
+                    <span>Satellite Imagery</span>
+                  </label>
+                </div>
+                <Separator className="my-4" />
+                <h3 className="text-sm font-medium">Overlay Layers</h3>
                 <div className="flex items-center justify-between">
                   <span>USA Short-Term Weather Warnings</span>
                   <Button variant="ghost" size="icon">
