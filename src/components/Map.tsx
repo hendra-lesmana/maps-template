@@ -55,6 +55,27 @@ export default function Map({ selectedBasemap }: MapProps) {
           }
         ]
       };
+    } else if (basemap === 'terrain') {
+      return {
+        version: 8 as const,
+        sources: {
+          'terrain-tiles': {
+            type: 'raster',
+            tiles: ['https://tile.opentopomap.org/{z}/{x}/{y}.png'],
+            tileSize: 256,
+            attribution: '© OpenTopoMap contributors'
+          }
+        },
+        layers: [
+          {
+            id: 'terrain-tiles',
+            type: 'raster',
+            source: 'terrain-tiles',
+            minzoom: 0,
+            maxzoom: 17
+          }
+        ]
+      };
     }
     return null;
   };

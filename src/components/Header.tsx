@@ -1,5 +1,6 @@
 'use client';
 
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Menubar, MenubarContent, MenubarItem, MenubarMenu, MenubarSeparator, MenubarShortcut, MenubarTrigger } from "@/components/ui/menubar";
 
@@ -7,7 +8,7 @@ export default function Header() {
   return (
     <header className="fixed top-0 left-0 right-0 h-14 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b flex items-center justify-between px-6 z-50">
       <div className="flex items-center gap-4">
-        <img src="/globe.svg" alt="Maps Logo" className="size-6" />
+        <Image src="/globe.svg" alt="Maps Logo" width={24} height={24} className="size-6" />
         <Menubar className="rounded-none border-none bg-transparent">
           <MenubarMenu>
             <MenubarTrigger>File</MenubarTrigger>
