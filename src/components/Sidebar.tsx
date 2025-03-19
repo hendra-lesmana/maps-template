@@ -23,6 +23,76 @@ export default function Sidebar({ onBasemapChange }: SidebarProps) {
   const [selectedRegency, setSelectedRegency] = useState('');
   const [selectedResidence, setSelectedResidence] = useState('');
   const [selectedVillage, setSelectedVillage] = useState('');
+  const [otherLayers, setOtherLayers] = useState({
+    business: {
+      expanded: false,
+      checked: false,
+      items: {
+        newSite: false,
+        competitor: false,
+        traditionalMarket: false
+      }
+    },
+    analysis: {
+      expanded: false,
+      checked: false,
+      items: {
+        hotspot: false,
+        populationHeatMap: false,
+        densityHeatMap: false
+      }
+    },
+    boundaries: {
+      expanded: false,
+      checked: false,
+      items: {
+        batasKota: false,
+        residential: false
+      }
+    }
+  });
+
+  const handleParentChange = (section: string, checked: boolean) => {
+    setOtherLayers(prev => ({
+      ...prev,
+      [section]: {
+        ...prev[section as keyof typeof prev],
+        checked,
+        items: Object.fromEntries(
+          Object.entries(prev[section as keyof typeof prev].items)
+          .map(([key]) => [key, checked])
+        )
+      }
+    }));
+  };
+
+  const handleChildChange = (section: string, item: string, checked: boolean) => {
+    setOtherLayers(prev => {
+      const newItems = {
+        ...prev[section as keyof typeof prev].items,
+        [item]: checked
+      };
+      const allChecked = Object.values(newItems).every(value => value);
+      return {
+        ...prev,
+        [section]: {
+          ...prev[section as keyof typeof prev],
+          checked: allChecked,
+          items: newItems
+        }
+      };
+    });
+  };
+
+  const toggleExpand = (section: string) => {
+    setOtherLayers(prev => ({
+      ...prev,
+      [section]: {
+        ...prev[section as keyof typeof prev],
+        expanded: !prev[section as keyof typeof prev].expanded
+      }
+    }));
+  };
 
   return (
     <>
@@ -105,6 +175,50 @@ export default function Sidebar({ onBasemapChange }: SidebarProps) {
 
             <fieldset className="mt-1 border border-gray-200/20 dark:border-gray-700/50 rounded-xl p-3 bg-gradient-to-br from-gray-50/5 via-gray-100/10 to-gray-50/5 dark:from-gray-800/20 dark:via-gray-700/20 dark:to-gray-800/20 shadow-lg backdrop-blur-sm transition-all duration-200 hover:shadow-xl hover:border-gray-300/30 dark:hover:border-gray-600/50">
               <legend className="text-xs font-medium px-2 py-0.5 bg-gradient-to-r from-white/90 via-white/95 to-white/90 dark:from-gray-900/90 dark:via-gray-900/95 dark:to-gray-900/90 rounded-lg text-gray-700 dark:text-gray-300 shadow-sm">
+                Others
+              </legend>
+              <div className="space-y-1.5">
+                {Object.entries(otherLayers).map(([section, { expanded, checked, items }]) => (
+                  <div key={section} className="space-y-1">
+                    <div className="flex items-center space-x-1">
+                      <button
+                        onClick={() => toggleExpand(section)}
+                        className="w-4 h-4 flex items-center justify-center text-xs text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                      >
+                        {expanded ? '▼' : '▶'}
+                      </button>
+                      <label className="flex items-center space-x-2 text-xs">
+                        <input
+                          type="checkbox"
+                          checked={checked}
+                          onChange={(e) => handleParentChange(section, e.target.checked)}
+                          className="rounded border-gray-300 text-primary shadow-sm focus:border-primary-500 focus:ring focus:ring-primary-500 focus:ring-opacity-50"
+                        />
+                        <span className="capitalize">{section}</span>
+                      </label>
+                    </div>
+                    {expanded && (
+                      <div className="ml-6 space-y-1">
+                        {Object.entries(items).map(([item, isChecked]) => (
+                          <label key={item} className="flex items-center space-x-2 text-xs">
+                            <input
+                              type="checkbox"
+                              checked={isChecked}
+                              onChange={(e) => handleChildChange(section, item, e.target.checked)}
+                              className="rounded border-gray-300 text-primary shadow-sm focus:border-primary-500 focus:ring focus:ring-primary-500 focus:ring-opacity-50"
+                            />
+                            <span className="capitalize">{item.replace(/([A-Z])/g, ' $1').trim()}</span>
+                          </label>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </fieldset>
+
+            <fieldset className="mt-1 border border-gray-200/20 dark:border-gray-700/50 rounded-xl p-3 bg-gradient-to-br from-gray-50/5 via-gray-100/10 to-gray-50/5 dark:from-gray-800/20 dark:via-gray-700/20 dark:to-gray-800/20 shadow-lg backdrop-blur-sm transition-all duration-200 hover:shadow-xl hover:border-gray-300/30 dark:hover:border-gray-600/50">
+              <legend className="text-xs font-medium px-2 py-0.5 bg-gradient-to-r from-white/90 via-white/95 to-white/90 dark:from-gray-900/90 dark:via-gray-900/95 dark:to-gray-900/90 rounded-lg text-gray-700 dark:text-gray-300 shadow-sm">
                 Base Layers
               </legend>
               <Select value={selectedBasemap} onValueChange={(value) => {
@@ -126,43 +240,43 @@ export default function Sidebar({ onBasemapChange }: SidebarProps) {
       </Sheet>
 
       <Sheet open={openHome} onOpenChange={setOpenHome}>
-        <SheetContent side="left" className="w-[300px] p-0 ml-16 mt-14 h-[calc(100%-56px)] z-[100]">
+        <SheetContent side="left" className="w-[300px] p-0 ml-16 mt-14 h-[calc(100%-56px)]">
           <SheetTitle className="p-4 text-lg font-semibold">Home</SheetTitle>
         </SheetContent>
       </Sheet>
 
       <Sheet open={openBookmarks} onOpenChange={setOpenBookmarks}>
-        <SheetContent side="left" className="w-[300px] p-0 ml-16 mt-14 h-[calc(100%-56px)] z-[100]">
+        <SheetContent side="left" className="w-[300px] p-0 ml-16 mt-14 h-[calc(100%-56px)]">
           <SheetTitle className="p-4 text-lg font-semibold">Bookmarks</SheetTitle>
         </SheetContent>
       </Sheet>
 
       <Sheet open={openFavorites} onOpenChange={setOpenFavorites}>
-        <SheetContent side="left" className="w-[300px] p-0 ml-16 mt-14 h-[calc(100%-56px)] z-[100]">
+        <SheetContent side="left" className="w-[300px] p-0 ml-16 mt-14 h-[calc(100%-56px)]">
           <SheetTitle className="p-4 text-lg font-semibold">Favorites</SheetTitle>
         </SheetContent>
       </Sheet>
 
       <Sheet open={openHistory} onOpenChange={setOpenHistory}>
-        <SheetContent side="left" className="w-[300px] p-0 ml-16 mt-14 h-[calc(100%-56px)] z-[100]">
+        <SheetContent side="left" className="w-[300px] p-0 ml-16 mt-14 h-[calc(100%-56px)]">
           <SheetTitle className="p-4 text-lg font-semibold">History</SheetTitle>
         </SheetContent>
       </Sheet>
 
       <Sheet open={openPrint} onOpenChange={setOpenPrint}>
-        <SheetContent side="left" className="w-[300px] p-0 ml-16 mt-14 h-[calc(100%-56px)] z-[100]">
+        <SheetContent side="left" className="w-[300px] p-0 ml-16 mt-14 h-[calc(100%-56px)]">
           <SheetTitle className="p-4 text-lg font-semibold">Print</SheetTitle>
         </SheetContent>
       </Sheet>
 
       <Sheet open={openLocation} onOpenChange={setOpenLocation}>
-        <SheetContent side="left" className="w-[300px] p-0 ml-16 mt-14 h-[calc(100%-56px)] z-[100]">
+        <SheetContent side="left" className="w-[300px] p-0 ml-16 mt-14 h-[calc(100%-56px)]">
           <SheetTitle className="p-4 text-lg font-semibold">Location</SheetTitle>
         </SheetContent>
       </Sheet>
 
       <Sheet open={openSettings} onOpenChange={setOpenSettings}>
-        <SheetContent side="left" className="w-[300px] p-0 ml-16 mt-14 h-[calc(100%-56px)] z-[100]">
+        <SheetContent side="left" className="w-[300px] p-0 ml-16 mt-14 h-[calc(100%-56px)]">
           <SheetTitle className="p-4 text-lg font-semibold">Settings</SheetTitle>
         </SheetContent>
       </Sheet>
