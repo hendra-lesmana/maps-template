@@ -123,9 +123,11 @@ export default function Sidebar({ onBasemapChange }: SidebarProps) {
         </Button>
       </nav>
       <Sheet open={openLayers} onOpenChange={setOpenLayers}>
-        <SheetContent side="left" className="w-[300px] p-0 ml-16 mt-14 h-[calc(100%-56px)]">
-          <SheetTitle className="p-4 text-lg font-semibold">Layers</SheetTitle>
-          <div className="p-1">
+        <SheetContent side="left" className="w-[300px] p-0 ml-16 mt-14 h-[calc(100%-56px)] flex flex-col">
+          <SheetTitle className="p-4 text-lg font-semibold border-b border-gray-200/20 dark:border-gray-700/50">
+            Layers
+          </SheetTitle>
+          <div className="p-1 overflow-y-auto">
             <fieldset className="mt-1 border border-gray-200/20 dark:border-gray-700/50 rounded-xl p-3 bg-gradient-to-br from-gray-50/5 via-gray-100/10 to-gray-50/5 dark:from-gray-800/20 dark:via-gray-700/20 dark:to-gray-800/20 shadow-lg backdrop-blur-sm transition-all duration-200 hover:shadow-xl hover:border-gray-300/30 dark:hover:border-gray-600/50">
               <legend className="text-xs font-medium px-2 py-0.5 bg-gradient-to-r from-white/90 via-white/95 to-white/90 dark:from-gray-900/90 dark:via-gray-900/95 dark:to-gray-900/90 rounded-lg text-gray-700 dark:text-gray-300 shadow-sm">
                 Administrative Layers
