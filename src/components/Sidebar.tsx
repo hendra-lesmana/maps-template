@@ -23,6 +23,7 @@ export default function Sidebar({ onBasemapChange }: SidebarProps) {
   const [selectedRegency, setSelectedRegency] = useState('');
   const [selectedResidence, setSelectedResidence] = useState('');
   const [selectedVillage, setSelectedVillage] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
   const [otherLayers, setOtherLayers] = useState({
     business: {
       expanded: false,
@@ -133,6 +134,50 @@ export default function Sidebar({ onBasemapChange }: SidebarProps) {
                 Administrative Layers
               </legend>
               <div className="space-y-1.5">
+                <div className="relative">
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Search administrative area..."
+                    className="w-full h-7 text-xs pl-7 pr-7 rounded-md border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  />
+                  <svg
+                    className="absolute left-2 top-1.5 w-4 h-4 text-gray-400"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                    />
+                  </svg>
+                  {searchQuery && (
+                    <button
+                      onClick={() => setSearchQuery('')}
+                      className="absolute right-2 top-1.5 w-4 h-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 focus:outline-none"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M6 18L18 6M6 6l12 12"
+                        />
+                      </svg>
+                    </button>
+                  )}
+                </div>
+                <div className="h-px my-2 bg-gradient-to-r from-transparent via-gray-200/20 dark:via-gray-700/50 to-transparent" />
                 <Select value={selectedProvince} onValueChange={setSelectedProvince}>
                   <SelectTrigger className="w-full h-7 text-xs">
                     <SelectValue placeholder="Select a province" />
