@@ -25,7 +25,7 @@ export default function ClientLayout({
     <body
       className={`${geistSans.variable} ${geistMono.variable} antialiased`}
     >
-      {pathname !== '/login' && pathname !== '/forgot-password' && <Header />}
+      {pathname === '/' && <Header />}
       {children}
     </body>
   );

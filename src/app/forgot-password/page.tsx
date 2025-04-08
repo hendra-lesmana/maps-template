@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
-  const [error, setError] = useState("");
+  const [errorMessage, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
@@ -35,6 +35,7 @@ export default function ForgotPasswordPage() {
       console.log("Password reset requested for:", email);
       setIsSuccess(true);
     } catch (error) {
+      console.error("Password reset error:", error);
       setError("Failed to send reset email. Please try again.");
     } finally {
       setIsSubmitting(false);
@@ -52,7 +53,7 @@ export default function ForgotPasswordPage() {
             <div className="text-center space-y-2 mb-6">
               <h2 className="text-2xl font-semibold">Forgot Password</h2>
               <p className="text-muted-foreground">
-                Enter your email address and we'll send you a link to reset your password
+                Enter your email address and we&apos;ll send you a link to reset your password
               </p>
             </div>
             {isSuccess ? (
@@ -70,10 +71,10 @@ export default function ForgotPasswordPage() {
                     placeholder="Enter your email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className={error ? "border-red-500" : ""}
+                    className={errorMessage ? "border-red-500" : ""}
                     disabled={isSubmitting}
                   />
-                  {error && <p className="text-sm text-red-500">{error}</p>}
+                  {errorMessage && <p className="text-sm text-red-500">{errorMessage}</p>}
                 </div>
               </div>
             )}
