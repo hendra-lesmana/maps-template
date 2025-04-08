@@ -118,7 +118,7 @@ export default function LoginPage() {
           <CardFooter className="flex flex-col space-y-4">
             <Button className="w-full" type="submit">Sign in</Button>
             <div className="flex justify-between w-full text-sm">
-              <a href="#" className="text-primary hover:underline">Forgot password?</a>
+              <a href="/forgot-password" className="text-primary hover:underline">Forgot password?</a>
               <a href="#" className="text-primary hover:underline">Create account</a>
             </div>
           </CardFooter>
